@@ -1,0 +1,38 @@
+.Subheader {
+  display: flex;
+  justify-content: center;
+
+  background-color: #777;
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    gap: 12px;
+    
+    list-style: none;
+    color: #c0c0c0;
+    font-size: 12px;
+    text-transform: uppercase;
+    height: 40px;
+    padding: 0;
+  }
+
+  &__nav-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 12px;
+    gap: 4px;
+
+    text-transform: uppercase;
+  }
+
+  &__icon {
+    height: 20px;
+  }
+
+  &__item-clear {
+    font-weight: bold;
+  }
+}

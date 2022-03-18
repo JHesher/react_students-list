@@ -1,0 +1,12 @@
+// .container {
+//   padding: 20px 60px;
+// }
+
+.StudentDetails {
+  background-color: #f2f2f2;
+  padding: 20px 60px;
+
+  &__student-info {
+    display: flex;
+  }
+}
