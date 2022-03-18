@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { CSVLink } from 'react-csv';
 
-import { getStudents, sortedByName } from '../../api/students';
+import { getStudents, getSortedBy } from '../../api/students';
 import { StudentDetails } from '../StudentDetails';
 
 import './StudentsList.scss';
@@ -11,13 +11,13 @@ export const StudentsList: React.FC = () => {
   const [students, setStudents] = useState<Student[]>([]);
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
+
   const [isDetailsVisible, setDetailsVisible] = useState(false);
-  const [selectedStudentUniqId, setSelectedStudentUniqId] = useState('');
+  const [selectedStudentId, setSelectedStudentId] = useState(0);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
-  const [sortByName, setSortByName] = useState(0);
-  // const [sortByName, setSortByName] = useState('');
-  // const [sortByScore, setSortByScore] = useState(0);
-  // const [sortBySpeed, setSortBySpeed] = useState(0);
+
+  const [sortBy, setSortBy] = useState('');
+  const [sortDir, setSortDir] = useState(0);
 
   const getStudentsByQuery = (studentFromServer: Student[]) => {
     const queryLowerCase = query.toLowerCase();
@@ -34,11 +34,9 @@ export const StudentsList: React.FC = () => {
   const csvmaker = (data: Student[]) => {
     const csvRows = [];
     const headers = Object.keys(data[0]);
-
-    csvRows.push([...headers]);
     const values = data.map(student => Object.values(student));
 
-    csvRows.push(...values);
+    csvRows.push([...headers], ...values);
 
     return csvRows.join('\n');
   };
@@ -48,56 +46,51 @@ export const StudentsList: React.FC = () => {
 
   const loadStudents = async () => {
     const dataFromServer = await getStudents(page);
-    const preparedData = dataFromServer.data
-      .map(student => ({
-        ...student,
-        uniq: uuidv4(),
-      }));
+    // const preparedData = dataFromServer.data
+    //   .map(student => ({
+    //     ...student,
+    //     uniq: uuidv4(),
+    //   }));
 
-    setStudents(getStudentsByQuery(preparedData));
-
-    csvData = csvmaker(preparedData);
-    // eslint-disable-next-line no-console
-    console.log(csvmaker(preparedData));
+    setStudents(getStudentsByQuery(dataFromServer.data));
+    csvData = csvmaker(dataFromServer.data);
   };
 
-  const setSortedById = async () => {
-    const dataFromServer = await sortedByName(page, sortByName);
+  const sorter = async () => {
+    const dataFromServer = await getSortedBy(page, sortBy, sortDir);
 
     setStudents(dataFromServer.data);
   };
 
-  const nextPage = () => {
-    setPage(page + 1);
-  };
+  const nextPage = () => setPage(page + 1);
+  const prevPage = () => setPage(page - 1);
 
-  const prevPage = () => {
-    setPage(page - 1);
-  };
-
-  const handleClick = (id: string) => {
+  const handleClick = (id: number) => {
     setDetailsVisible(!isDetailsVisible);
-    setSelectedStudentUniqId(id);
+    setSelectedStudentId(id);
     const setStudent = students
-      .find(student => student.uniq === selectedStudentUniqId) || null;
+      .find(student => student.id === selectedStudentId) || null;
 
     setSelectedStudent(setStudent);
   };
 
-  const handleClickName = () => (
-    sortByName === 0 ? setSortByName(-1) : setSortByName(sortByName * -1)
-  );
+  const setSorter = (value: string) => {
+    if (sortDir === 0) {
+      setSortDir(-1);
+    } else {
+      setSortDir(sortDir * -1);
+    }
 
-  // eslint-disable-next-line no-console
-  console.log(sortByName);
+    setSortBy(value);
+  };
 
   useEffect(() => {
     loadStudents();
   }, [page, query]);
 
   useEffect(() => {
-    setSortedById();
-  }, [sortByName]);
+    sorter();
+  }, [sortBy, sortDir]);
 
   return (
     <div className="StudentsList">
@@ -144,7 +137,10 @@ export const StudentsList: React.FC = () => {
             <button
               className="button"
               type="button"
-              onClick={() => handleClickName()}
+              name="name"
+              onClick={(event) => setSorter(
+                (event.currentTarget as HTMLButtonElement).name,
+              )}
             >
               <img
                 className="table__img"
@@ -174,6 +170,10 @@ export const StudentsList: React.FC = () => {
             <button
               className="button"
               type="button"
+              name="score"
+              onClick={(event) => setSorter(
+                (event.currentTarget as HTMLButtonElement).name,
+              )}
             >
               <img
                 className="table__img"
@@ -188,6 +188,10 @@ export const StudentsList: React.FC = () => {
             <button
               className="button"
               type="button"
+              name="speed"
+              onClick={(event) => setSorter(
+                (event.currentTarget as HTMLButtonElement).name,
+              )}
             >
               <img
                 className="table__img"
@@ -207,7 +211,7 @@ export const StudentsList: React.FC = () => {
               <>
                 <li
                   className="table__item"
-                  key={student.uniq}
+                  key={uuidv4()}
                 >
                   <input type="checkbox" />
                   <div className="table__name">
@@ -263,11 +267,11 @@ export const StudentsList: React.FC = () => {
                     <button
                       className="button"
                       type="button"
-                      value={selectedStudentUniqId}
-                      onClick={() => handleClick(student.uniq)}
+                      value={selectedStudentId}
+                      onClick={() => handleClick(student.id)}
                     >
                       {
-                        (isDetailsVisible && selectedStudentUniqId === student.uniq) ? (
+                        (isDetailsVisible && selectedStudentId === student.id) ? (
                           <img
                             className="table__img-info"
                             src="img/arrow_drop_up.svg"
@@ -285,7 +289,7 @@ export const StudentsList: React.FC = () => {
                   </div>
                 </li>
                 {
-                  selectedStudentUniqId === student.uniq
+                  selectedStudentId === student.id
                   && isDetailsVisible
                   && selectedStudent
                   && <StudentDetails student={selectedStudent} />
