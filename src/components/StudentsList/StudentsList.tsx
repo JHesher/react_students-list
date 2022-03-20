@@ -45,12 +45,7 @@ export const StudentsList: React.FC = () => {
 
   const loadStudents = async () => {
     const dataFromServer = await getStudents(page);
-    // const preparedData = dataFromServer.data
-    //   .map(student => ({
-    //     ...student,
-    //     uniq: uuidv4(),
-    //   }));
-
+    
     setStudents(getStudentsByQuery(dataFromServer.data));
     const dataForDownload = csvmaker(dataFromServer.data);
 
