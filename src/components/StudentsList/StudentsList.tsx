@@ -66,12 +66,15 @@ export const StudentsList: React.FC = () => {
   const prevPage = () => setPage(page - 1);
 
   const handleClick = (id: number) => {
-    setDetailsVisible(!isDetailsVisible);
     setSelectedStudentId(id);
     const setStudent = students
-      .find(student => student.id === selectedStudentId) || null;
+      .find(student => student.id === id) || null;
 
     setSelectedStudent(setStudent);
+
+    if (selectedStudentId === id || selectedStudentId === 0) {
+      setDetailsVisible(!isDetailsVisible);
+    }
   };
 
   const setSorter = (value: string) => {
@@ -208,11 +211,10 @@ export const StudentsList: React.FC = () => {
         <div className="table__body">
           <ul className="table__list">
             {students.map(student => (
-              <>
-                <li
-                  className="table__item"
-                  key={uuidv4()}
-                >
+              <li
+                key={uuidv4()}
+              >
+                <div className="table__item">
                   <input type="checkbox" />
                   <div className="table__name">
                     <span>{student.name}</span>
@@ -287,14 +289,13 @@ export const StudentsList: React.FC = () => {
                       }
                     </button>
                   </div>
-                </li>
+                </div>
                 {
                   selectedStudentId === student.id
                   && isDetailsVisible
-                  && selectedStudent
                   && <StudentDetails student={selectedStudent} />
                 }
-              </>
+              </li>
             ))}
           </ul>
         </div>
