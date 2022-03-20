@@ -19,6 +19,8 @@ export const StudentsList: React.FC = () => {
   const [sortBy, setSortBy] = useState('');
   const [sortDir, setSortDir] = useState(0);
 
+  const [csvData, setCSVData] = useState<(string | number | string[] | Test[])[][]>([]);
+
   const getStudentsByQuery = (studentFromServer: Student[]) => {
     const queryLowerCase = query.toLowerCase();
 
@@ -38,11 +40,8 @@ export const StudentsList: React.FC = () => {
 
     csvRows.push([...headers], ...values);
 
-    return csvRows.join('\n');
+    return csvRows;
   };
-
-  // let csvData: (string | number | string[] | Test[])[][] = [];
-  let csvData = '';
 
   const loadStudents = async () => {
     const dataFromServer = await getStudents(page);
@@ -53,7 +52,9 @@ export const StudentsList: React.FC = () => {
     //   }));
 
     setStudents(getStudentsByQuery(dataFromServer.data));
-    csvData = csvmaker(dataFromServer.data);
+    const dataForDownload = csvmaker(dataFromServer.data);
+
+    setCSVData(dataForDownload);
   };
 
   const sorter = async () => {
