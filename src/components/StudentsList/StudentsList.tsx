@@ -11,6 +11,7 @@ export const StudentsList: React.FC = () => {
   const [students, setStudents] = useState<Student[]>([]);
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
+  const [size, setSize] = useState('10');
 
   const [isDetailsVisible, setDetailsVisible] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(0);
@@ -44,8 +45,8 @@ export const StudentsList: React.FC = () => {
   };
 
   const loadStudents = async () => {
-    const dataFromServer = await getStudents(page);
-    
+    const dataFromServer = await getStudents(page, size);
+
     setStudents(getStudentsByQuery(dataFromServer.data));
     const dataForDownload = csvmaker(dataFromServer.data);
 
@@ -53,7 +54,7 @@ export const StudentsList: React.FC = () => {
   };
 
   const sorter = async () => {
-    const dataFromServer = await getSortedBy(page, sortBy, sortDir);
+    const dataFromServer = await getSortedBy(page, sortBy, sortDir, size);
 
     setStudents(dataFromServer.data);
   };
@@ -62,7 +63,12 @@ export const StudentsList: React.FC = () => {
   const prevPage = () => setPage(page - 1);
 
   const handleClick = (id: number) => {
-    setSelectedStudentId(id);
+    if (selectedStudentId !== id) {
+      setSelectedStudentId(id);
+    } else {
+      setSelectedStudentId(0);
+    }
+
     const setStudent = students
       .find(student => student.id === id) || null;
 
@@ -83,9 +89,13 @@ export const StudentsList: React.FC = () => {
     setSortBy(value);
   };
 
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSize(event.target.value);
+  };
+
   useEffect(() => {
     loadStudents();
-  }, [page, query]);
+  }, [page, query, size]);
 
   useEffect(() => {
     sorter();
@@ -151,9 +161,17 @@ export const StudentsList: React.FC = () => {
 
           <div className="table__id">
             <span>ID</span>
+          </div>
+
+          <div className="table__class">
+            <span>Class</span>
             <button
               className="button"
               type="button"
+              name="class"
+              onClick={(event) => setSorter(
+                (event.currentTarget as HTMLButtonElement).name,
+              )}
             >
               <img
                 src="img/unfold_more.svg"
@@ -161,8 +179,6 @@ export const StudentsList: React.FC = () => {
               />
             </button>
           </div>
-
-          <div className="table__class">Class</div>
 
           <div className="table__score">
             <span>Av.Score,%</span>
@@ -263,7 +279,7 @@ export const StudentsList: React.FC = () => {
                   </div>
                   <div className="table__actions table__actions--list">
                     <button
-                      className="button"
+                      className="table__button button"
                       type="button"
                       value={selectedStudentId}
                       onClick={() => handleClick(student.id)}
@@ -303,12 +319,22 @@ export const StudentsList: React.FC = () => {
             Rows per page:
           </div>
           <div className="StudentsList__counter">
-            10
-            <img
-              className="StudentsList__icon"
-              src="img/arrow_drop_down--mid-gray.svg"
-              alt="arrow_drop_down"
-            />
+            <select
+              onChange={handleChange}
+              value={size}
+              className="App__user-selector"
+            >
+              <option value="1"> 1 </option>
+              <option value="2"> 2 </option>
+              <option value="3"> 3 </option>
+              <option value="4"> 4 </option>
+              <option value="5"> 5 </option>
+              <option value="6"> 6 </option>
+              <option value="7"> 7 </option>
+              <option value="8"> 8 </option>
+              <option value="9"> 9 </option>
+              <option value="10"> 10 </option>
+            </select>
           </div>
         </div>
 

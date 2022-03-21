@@ -1,12 +1,236 @@
-// .container {
-//   padding: 20px 60px;
-// }
-
 .StudentDetails {
   background-color: #f2f2f2;
   padding: 20px 60px;
 
   &__student-info {
     display: flex;
+    margin-bottom: 12px;
+
+    color: #5b5b5b;
+    text-transform: uppercase;
+  }
+
+  &__student {
+    &--strong {
+      font-weight: 700;
+      margin: 0 8px;
+    }
+  }
+
+  &__filters {
+    display: flex;
+    margin-bottom: 12px;
+  }
+
+  &__cached {
+    display: flex;
+    align-items: center;
+  }
+
+  &__first-selector {
+    width: 1102px;
+    height: 1px;
+    background: #A6192E;
+
+    margin-bottom: 12px;
+  }
+
+  &__second-selector {
+    width: 1078px;
+    height: 2px;
+    background: #A6192E;
+
+    margin-bottom: 6px;
+  }
+
+  &__table {
+    margin-bottom: 6px;
+  }
+
+  &__table-head {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+    align-items: center;
+
+    height: 20px;
+  }
+  
+  &__table-item {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    height: 32px;
+
+    &--inactive {
+      color: #c0c0c0;
+    }
+  }
+
+  &__table-count {
+    width: 12px;
+  }
+
+  &__table-test {
+    width: 300px;
+  }
+
+  &__table-score,
+  &__table-absent {
+    width: 48px;
+  }
+
+  &__table-speed {
+    width: 113px;
+  }
+
+  &__table-total {
+    width: 68px;
+  }
+
+  &__table-exp {
+    width: 119px;
+  }
+
+  &__table-concept {
+    width: 152px;
+  }
+
+  &__table-date {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 112px;
+  }
+
+  &__table-absent {
+    text-align: center;
+  }
+
+  &__average {
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    height: 48px;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  &__average-title {
+    color: #777;
+    margin-left: 42px;
+    margin-right: 237px;
+  }
+
+  &__average-percent,
+  &__average-expected {
+    margin-right: 60px;
+  }
+}
+
+.selector {
+  display: flex;
+  gap: 16px;
+  margin-right: 16px;
+
+  &__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    padding: 6px 12px;
+
+    border: 1px solid #c0c0c0;
+    background-color: #fff;
+  }
+
+  &__title {
+    text-align: center;
+    margin-right: 4px;
+    font-family: 'Rubik', serif;
+    text-transform: uppercase;
+    color: #5b5b5b;
+    font-weight: 700;
+  }
+
+  &__img {
+    width: 20px;
+  }
+}
+
+.period {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 192px;
+  padding: 7px 0;
+
+  width: 200px;
+  border-bottom: 1px solid #c0c0c0;
+
+  &__title {
+    text-align: center;
+    text-transform: uppercase;
+    font-style: 12px;
+    color: #c0c0c0;
+  }
+}
+
+.labels {
+  font-size: 12px;
+  color: #777;
+  text-transform: uppercase;
+
+  display: flex;
+  gap: 24px;
+  margin-bottom: 12px;
+
+  &__label {
+    display: flex;
+
+    &--blue {
+      color: #4285f4;
+    }
+
+    &--green {
+      color: #0f9d58;
+    }
+
+    &--yellow {
+      color: #e2b534;
+    }
+
+    &--red {
+      color: #db4437;
+    }
+  }
+
+  &__point {
+    width: 12px;
+    height: 12px;
+    border-radius: 40px;
+
+    margin-right: 8px;
+
+    &--blue {
+      background: #4285f4;
+    }
+
+    &--green {
+      background: #0f9d58;
+    }
+
+    &--yellow {
+      background-color: #e2b534;
+    }
+
+    &--red {
+      background-color: #db4437;
+    }
   }
 }

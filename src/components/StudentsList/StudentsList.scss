@@ -141,6 +141,7 @@
   }
 
   &__img-info {
+    display: flex;
     margin-right: 6px;
   }
 
@@ -158,6 +159,10 @@
     list-style: none;
     background-color: #fff;
     box-shadow: 0px 1px 4px rgba(60, 52, 135, 0.15);
+  }
+
+  &__button {
+    display: flex;
   }
 }
 

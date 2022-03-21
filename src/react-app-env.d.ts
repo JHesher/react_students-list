@@ -3,6 +3,7 @@
 type List = {
   totalPages: number,
   data: Student[],
+  size: string,
 };
 
 type Student = {
@@ -24,5 +25,5 @@ type Test = {
   expSpeed: string,
   concept: string,
   date: string,
-  abcent: boolean,
+  absent?: boolean,
 };
